@@ -59,7 +59,7 @@ htitle = title(ha_fft,'Simulated Real Time Power Spectrum');
 xlabel(ha_fft,'Frequency (Hz)'); ylabel(ha_fft,'|Y(f)|');
 
 % Event marker plot
-timemarker = time_simulation(event, ha_event);
+timemarker = time_simulation(event, ha_event, Fs);
 
 % Start stimulation
 jump = floor(overlap*windowL);
@@ -103,7 +103,7 @@ for i = 1:jump:(L-windowL)
     set(htitle, 'string', sprintf('Simulated Real Time Power Spectrum at t = %.2f', ts(i)));
     
     % Update time marker
-    set(timemarker, 'XData', [i i]);
+    set(timemarker, 'XData', [i i]/Fs);
     
     if i == 1
         continue;

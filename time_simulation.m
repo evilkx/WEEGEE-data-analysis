@@ -1,7 +1,10 @@
-function timemarker = time_simulation(myevent, ha_event)
+function timemarker = time_simulation(myevent, ha_event, Fs)
 % Description: To perform time that the ssvep experience's 
 %              working for each trials
-% Input: myevent 
+% Input: 
+%   myevent     : event vectors
+%   ha_event    : axes handles
+%   Fs          : sampling frequency
 %        
 % Output: time_simulation % That the figure will be shown
 % Example: 
@@ -34,40 +37,20 @@ end
 eventcolor = rand(length(numtype), 3);
 
 %% Plot event marker
-% First event
-indexC = strfind(numtype, myevent(1).type);
-idx = find(not(cellfun(@isempty, indexC)));
-rectangle('Position', [0, 0, latency(1) 10], ...
-    'FaceColor', eventcolor(idx, :) , ...
-    'Parent', ha_event);
-
-text(0, 0, myevent(1).type,...
-    'HorizontalAlignment', 'left', 'BackgroundColor', 'm', 'Fontsize', 9, 'Parent', ha_event);
-
-% From second event to the end
-for i = 2:n  
+for i = 1:n  
     curtype = myevent(i).type;
     indexC = strfind(numtype, myevent(i).type);
     idx = find(not(cellfun(@isempty, indexC)));
-    try
-        hrec = rectangle('Position', [latency(i), 0, latency(i) - latency(i-1), 10]);
-    catch ME
-        if strcmp(ME.identifier, 'MATLAB:hg:set_chck:DimensionsOutsideRange')
-            warning('Two events have the same latency. Check the events');
-            % Create new rec, width = 1
-            hrec = rectangle('Position', [latency(i), 0, latency(i) - latency(i-1) + 1, 10]);
-        else
-%             rethrow(ME);
-            disp('something else got wrong');
-        end
-    end
-    set(hrec, 'FaceColor', eventcolor(idx, :),'Parent', ha_event);
-    text(latency(i), 0, myevent(i).type, 'HorizontalAlignment', 'left', 'BackgroundColor', 'm', 'Fontsize', 9, 'Parent', ha_event);
+
+    rectangle('Position', [latency(i)/Fs, 0, 2, 10], ...
+        'FaceColor', eventcolor(idx, :),'Parent', ha_event);
+    text(latency(i)/Fs, 0, myevent(i).type, ...
+        'HorizontalAlignment', 'left', 'BackgroundColor', 'm', 'Fontsize', 9, 'Parent', ha_event);
 end
 
 %% 
 ylim = get(ha_event, 'YLim');
-timemarker = line([0 0], ylim, 'color', [1 0.5 0.5], 'LineWidth', 10);
+timemarker = line([0 0], ylim, 'color', [1 0.5 0.5], 'LineWidth', 5, 'Parent', ha_event);
 alpha(0.4)
 
 end
