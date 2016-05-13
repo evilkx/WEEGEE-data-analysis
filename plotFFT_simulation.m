@@ -1,4 +1,4 @@
-function plotFFT_simulation(sig, Fs, windowL, overlap)
+function plotFFT_simulation(sig, Fs, chan, windowL, overlap, ha_fft, event, ha_event)
 %% PLOTFFT_SIMULATION visualizes simulated power spectrum in realtime. The 
 % peak of each power spectrum at given time is detected and marked. The
 % corresponding SNR value is also calculated.
@@ -6,6 +6,7 @@ function plotFFT_simulation(sig, Fs, windowL, overlap)
 % In:
 %   Sig     : the signal that needs analyzing
 %   Fs      : sampling frequency
+%   chan    : channel, default: 1
 %   windowL : window length, default: 510
 %   overlap : overlapping portion of the moving window, from 0 to 1, default:1
 %
@@ -18,14 +19,30 @@ function plotFFT_simulation(sig, Fs, windowL, overlap)
 % See also fft
 
 if nargin < 3
+    chan=1;
     windowL = 510;
     overlap = 1;
+    ha_fft=subplot(1,1,1);
 elseif nargin < 4
+    windowL=510;
     overlap = 1;
+    ha_fft=subplot(1,1,1);
+elseif nargin < 5
+    overlap = 1;
+    ha_fft=subplot(1,1,1);
+
 end
     
+numberchan=size(sig(:,1));  %selec channel
+if chan > numberchan
+    error(message('The signal does not include that channel',chan));
+end
+data=sig(chan,:);
+
+
+
 % Initializing
-L = length(sig);        % Length of the signal
+L = length(data);        % Length of the signal
 T = 1/Fs;               % Sample time
 ts = (0:L-1)*T;          % Time vector
 
@@ -35,16 +52,19 @@ NFFT = 2^nextpow2(windowL);           % Next power of 2 from length of y, requir
 f = Fs/2*linspace(0,1,NFFT/2+1);% frequency series vector
 
 % Initialize the plot
-figure('Name', 'Simulated Realtime FFT analyzing')
-hplot = plot(f, f);             % Plot anything, doesnt matter
-htext = text(0,0, 'Nothing', 'HorizontalAlignment', 'left');   % Init a text for peak
-htitle = title('Simulated Real Time Power Spectrum');
-xlabel('Frequency (Hz)'); ylabel('|Y(f)|');
+%figure('Name', 'Simulated Realtime FFT analyzing')
+hplot = plot(ha_fft,f, f);             % Plot anything, doesnt matter
+htext = text(0,0, 'Nothing', 'HorizontalAlignment', 'left','Parent',ha_fft);   % Init a text for peak
+htitle = title(ha_fft,'Simulated Real Time Power Spectrum');
+xlabel(ha_fft,'Frequency (Hz)'); ylabel(ha_fft,'|Y(f)|');
+
+% Event marker plot
+timemarker = time_simulation(event, ha_event);
 
 % Start stimulation
 jump = floor(overlap*windowL);
 for i = 1:jump:(L-windowL)
-    x = sig(i:(i+windowL));             % Fraction of signal being analyzed
+    x = data(i:(i+windowL));             % Fraction of signal being analyzed
     y_temp = fft(x,NFFT)/windowL;       % Perform Fourier Transform
     y = 2*abs(y_temp(1:NFFT/2+1));      % Take absolute values and only the first half of the result since the second is just a mirror of the first one.
 
@@ -81,6 +101,9 @@ for i = 1:jump:(L-windowL)
     
     % Update title
     set(htitle, 'string', sprintf('Simulated Real Time Power Spectrum at t = %.2f', ts(i)));
+    
+    % Update time marker
+    set(timemarker, 'XData', [i i]);
     
     if i == 1
         continue;
