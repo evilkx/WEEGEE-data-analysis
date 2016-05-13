@@ -382,3 +382,10 @@ function numberofchan_text_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to numberofchan_text (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
+
+
+% --- Executes on button press in spectrogram_push_plot.
+function spectrogram_push_plot_Callback(hObject, eventdata, handles)
+% hObject    handle to spectrogram_push_plot (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
