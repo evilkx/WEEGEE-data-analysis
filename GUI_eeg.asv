@@ -108,10 +108,10 @@ global data
 startgr=get(handles.spectrogram_edit_startgr,'String');     %set startgraph
 startgr=str2num(startgr);
 
-chan=get(handles.spectrogram_edit_chan,'String');           %set channel
+chan=get(handles.spectrogram_edit_chan,'String');
 chan=str2num(chan);
 
-plot_spectrogram(data,startgr,chan,handles.axes_spectrogram);
+plot_spectrogram(data,startgr,chan,axes_handles)
 
 
 % --- Executes on selection change in spectrogram_listbox_channel.
@@ -138,18 +138,18 @@ end
 
 
 
-function spectrogram_edit_startgr_Callback(hObject, eventdata, handles)
-% hObject    handle to spectrogram_edit_startgr (see GCBO)
+function spectrogram_edit_para_Callback(hObject, eventdata, handles)
+% hObject    handle to spectrogram_edit_para (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of spectrogram_edit_startgr as text
-%        str2double(get(hObject,'String')) returns contents of spectrogram_edit_startgr as a double
+% Hints: get(hObject,'String') returns contents of spectrogram_edit_para as text
+%        str2double(get(hObject,'String')) returns contents of spectrogram_edit_para as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function spectrogram_edit_startgr_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to spectrogram_edit_startgr (see GCBO)
+function spectrogram_edit_para_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to spectrogram_edit_para (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -255,18 +255,18 @@ end
 
 
 
-function spectrogram_edit_chan_Callback(hObject, eventdata, handles)
-% hObject    handle to spectrogram_edit_chan (see GCBO)
+function spectrogram_edit_channel_Callback(hObject, eventdata, handles)
+% hObject    handle to spectrogram_edit_channel (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of spectrogram_edit_chan as text
-%        str2double(get(hObject,'String')) returns contents of spectrogram_edit_chan as a double
+% Hints: get(hObject,'String') returns contents of spectrogram_edit_channel as text
+%        str2double(get(hObject,'String')) returns contents of spectrogram_edit_channel as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function spectrogram_edit_chan_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to spectrogram_edit_chan (see GCBO)
+function spectrogram_edit_channel_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to spectrogram_edit_channel (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
