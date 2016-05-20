@@ -63,7 +63,10 @@ timemarker = time_simulation(event, ha_event, Fs);
 
 % Start stimulation
 jump = floor(overlap*windowL);
-for i = 1:jump:(L-windowL)
+global i;
+
+while i<(L-windowL)
+    i=i+jump;
     x = data(i:(i+windowL));             % Fraction of signal being analyzed
     y_temp = fft(x,NFFT)/windowL;       % Perform Fourier Transform
     y = 2*abs(y_temp(1:NFFT/2+1));      % Take absolute values and only the first half of the result since the second is just a mirror of the first one.
@@ -110,4 +113,5 @@ for i = 1:jump:(L-windowL)
     else
         pause(ts(i) - ts(i-jump));
     end
+
 end

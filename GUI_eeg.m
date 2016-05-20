@@ -62,22 +62,36 @@ function push_run_Callback(hObject, eventdata, handles)
 % hObject    handle to push_run (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global data event
-
-Fs=get(handles.fft_edit_fs,'String');           %set fs
-Fs=str2num(Fs);
-
-chan=get(handles.fft_edit_chan,'String');       %set channel
-chan=str2num(chan);
-
-windowL=get(handles.fft_edit_wl,'String');      %set window length
-windowL=str2num(windowL);
-
-overlap=get(handles.fft_edit_ol,'String');      %set overlap
-overlap=str2num(overlap);
+global data event i;
+i=1;
 
 
-plotFFT_simulation(data, Fs, chan, windowL, overlap, handles.axes_simulation, event, handles.axes_event);
+text_push=get(handles.push_run,'String');
+
+if strcmp(text_push, 'Run')
+
+    set(handles.push_run,'String','Pause');
+    
+    Fs=get(handles.fft_edit_fs,'String');           %set fs
+    Fs=str2num(Fs);
+
+    chan=get(handles.fft_edit_chan,'String');       %set channel
+    chan=str2num(chan);
+
+    windowL=get(handles.fft_edit_wl,'String');      %set window length
+    windowL=str2num(windowL);
+
+    overlap=get(handles.fft_edit_ol,'String');      %set overlap
+    overlap=str2num(overlap);
+
+
+    plotFFT_simulation(data, Fs, chan, windowL, overlap, ...
+                        handles.axes_simulation, event, handles.axes_event);
+
+elseif strcmp(text_push,'Pause')
+    set(handles.push_run,'String','Run');
+    uiwait(GUI_eeg);
+end
 
 
 % --- Executes on button press in push_bf.
