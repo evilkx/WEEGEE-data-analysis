@@ -17,20 +17,23 @@ function plotFFT_simulation(sig, Fs, chan, windowL, overlap, ha_fft, event, ha_e
 %   plotFFT_simulation(data1ftft, 255);
 %
 % See also fft
+persistent i
 
 if nargin < 3
     chan=1;
     windowL = 510;
     overlap = 1;
     ha_fft=subplot(1,1,1);
+    
 elseif nargin < 4
     windowL=510;
     overlap = 1;
     ha_fft=subplot(1,1,1);
+    
 elseif nargin < 5
     overlap = 1;
     ha_fft=subplot(1,1,1);
-
+    
 end
     
 numberchan=size(sig(:,1));  %selec channel
@@ -63,10 +66,12 @@ timemarker = time_simulation(event, ha_event, Fs);
 
 % Start stimulation
 jump = floor(overlap*windowL);
-global i;
 
-while i<(L-windowL)
-    i=i+jump;
+if isempty(i)
+   i = 1;
+end
+for i=i:jump:(L-windowL)
+
     x = data(i:(i+windowL));             % Fraction of signal being analyzed
     y_temp = fft(x,NFFT)/windowL;       % Perform Fourier Transform
     y = 2*abs(y_temp(1:NFFT/2+1));      % Take absolute values and only the first half of the result since the second is just a mirror of the first one.

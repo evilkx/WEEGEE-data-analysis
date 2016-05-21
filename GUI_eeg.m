@@ -62,14 +62,16 @@ function push_run_Callback(hObject, eventdata, handles)
 % hObject    handle to push_run (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global data event i;
-i=1;
 
+global data event
+persistent i
 
 text_push=get(handles.push_run,'String');
 
 if strcmp(text_push, 'Run')
-
+    cla (handles.axes_simulation,'reset');
+    cla (handles.axes_event,'reset');
+    
     set(handles.push_run,'String','Pause');
     
     Fs=get(handles.fft_edit_fs,'String');           %set fs
@@ -91,6 +93,7 @@ if strcmp(text_push, 'Run')
 elseif strcmp(text_push,'Pause')
     set(handles.push_run,'String','Run');
     uiwait(GUI_eeg);
+
 end
 
 
