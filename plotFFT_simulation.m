@@ -1,4 +1,4 @@
-function plotFFT_simulation(sig, Fs, chan, windowL, overlap, ha_fft, event, ha_event)
+function idata=plotFFT_simulation(sig, Fs, chan, windowL, overlap, ha_fft, event, ha_event)
 %% PLOTFFT_SIMULATION visualizes simulated power spectrum in realtime. The 
 % peak of each power spectrum at given time is detected and marked. The
 % corresponding SNR value is also calculated.
@@ -17,7 +17,8 @@ function plotFFT_simulation(sig, Fs, chan, windowL, overlap, ha_fft, event, ha_e
 %   plotFFT_simulation(data1ftft, 255);
 %
 % See also fft
-persistent i
+global i
+global iend  
 
 if nargin < 3
     chan=1;
@@ -70,8 +71,13 @@ jump = floor(overlap*windowL);
 if isempty(i)
    i = 1;
 end
-for i=i:jump:(L-windowL)
 
+if isempty(iend)
+    iend=L-windowL;
+end
+    
+
+for i=i:jump:iend
     x = data(i:(i+windowL));             % Fraction of signal being analyzed
     y_temp = fft(x,NFFT)/windowL;       % Perform Fourier Transform
     y = 2*abs(y_temp(1:NFFT/2+1));      % Take absolute values and only the first half of the result since the second is just a mirror of the first one.
@@ -120,3 +126,4 @@ for i=i:jump:(L-windowL)
     end
 
 end
+

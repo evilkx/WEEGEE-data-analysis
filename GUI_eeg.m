@@ -63,7 +63,7 @@ function push_run_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-global data event
+global data event iend windowL Fs chan overlap jump
 persistent i
 
 text_push=get(handles.push_run,'String');
@@ -85,11 +85,20 @@ if strcmp(text_push, 'Run')
 
     overlap=get(handles.fft_edit_ol,'String');      %set overlap
     overlap=str2num(overlap);
+    
+    i=1;                                            %setup plot start at i=1
+    iend=length(data)-windowL;                      %setup plot end at i=L-windowL
 
-
+    %setup for slider    
+    jump=floor(overlap*windowL);
+    set(handles.slider_simulation,'Max',iend);      
+    set(handles.slider_simulation,'SliderStep', [windowL/iend 10*windowL/iend]);
+    max=get(handles.slider_simulation,'Max'); 
+    
     plotFFT_simulation(data, Fs, chan, windowL, overlap, ...
                         handles.axes_simulation, event, handles.axes_event);
-
+    
+               
 elseif strcmp(text_push,'Pause')
     set(handles.push_run,'String','Run');
     uiwait(GUI_eeg);
@@ -129,6 +138,43 @@ chan=get(handles.spectrogram_edit_chan,'String');           %set channel
 chan=str2num(chan);
 
 plot_spectrogram(data,startgr,chan,handles.axes_spectrogram);
+
+
+% --- Executes on slider movement.
+function slider_simulation_Callback(hObject, eventdata, handles)
+% hObject    handle to slider_simulation (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+global data event iend windowL Fs chan overlap jump
+global i
+
+cla (handles.axes_simulation,'reset');
+cla (handles.axes_event,'reset');
+
+% setup start point and end poit for plot simulation
+i=get(handles.slider_simulation,'Value');
+iend=i+jump;
+plotFFT_simulation(data, Fs, chan, windowL, overlap, ...
+                        handles.axes_simulation, event, handles.axes_event);
+
+
+
+
+% Hints: get(hObject,'Value') returns position of slider
+%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+
+
+% --- Executes during object creation, after setting all properties.
+function slider_simulation_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to slider_simulation (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: slider controls usually have a light gray background.
+if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor',[.9 .9 .9]);
+end
 
 
 % --- Executes on selection change in spectrogram_listbox_channel.
@@ -317,40 +363,6 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-% --- Executes during object creation, after setting all properties.
-function listbox_sig_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to listbox_sig (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: listbox controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-% --------------------------------------------------------------------
-function Untitled_1_Callback(hObject, eventdata, handles)
-% hObject    handle to Untitled_1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-
-% --- Executes during object creation, after setting all properties.
-function danhdeptrai_edit_danh_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to danhdeptrai_edit_danh (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
-
-
-
 function loadfile_edit_Callback(hObject, eventdata, handles)
 % hObject    handle to loadfile_edit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -415,5 +427,8 @@ function numberofchan_text_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to numberofchan_text (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
+
+
+
 
 
