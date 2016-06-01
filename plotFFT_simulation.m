@@ -19,6 +19,10 @@ function idata=plotFFT_simulation(sig, Fs, chan, windowL, overlap, ha_fft, event
 % See also fft
 global i
 global iend  
+ %queue for snr to make sure that high snr is a high snr from brainwaves 
+% rather than noises
+persistent snrqueue;
+snrqueue = zeros(1,4);
 
 if nargin < 3
     chan=1;
@@ -98,13 +102,14 @@ for i=i:jump:iend
 
     % SNR
     meanY = mean(interestY);
-    snr = ymax/meanY;
-
-    strmax = ['Max= ',num2str(xmax),' SNR= ',num2str(snr)];
-    textcolor='rbkymg';
+   
+    snrqueue =[snrqueue(2:end) ymax/meanY]; %shift new snr data to queue
     
+    strmax = ['Max= ',num2str(xmax),' SNR= ',num2str(snrqueue(end))];
+    textcolor='rbkymg';
+   
     % Change color based on algo decision
-    if (snr > 3) && ( 12< xmax) && (xmax <13)
+    if (snrqueue > 5) 
       tc = 1; %assign red if it is a detection  
     else
       tc = 2;
@@ -126,4 +131,8 @@ for i=i:jump:iend
     end
 
 end
+
+if i > (iend-jump)
+    i =1; %reset i to rerun
+end   
 
