@@ -1,4 +1,4 @@
-function idata=plotFFT_simulation(sig, Fs, chan, windowL, overlap, ha_fft, event, ha_event)
+function plotFFT_simulation(sig, Fs, chan, windowL, overlap, ha_fft, event, ha_event)
 %% PLOTFFT_SIMULATION visualizes simulated power spectrum in realtime. The 
 % peak of each power spectrum at given time is detected and marked. The
 % corresponding SNR value is also calculated.
@@ -18,7 +18,7 @@ function idata=plotFFT_simulation(sig, Fs, chan, windowL, overlap, ha_fft, event
 %
 % See also fft
 global i
-global iend  
+global iend ts
  %queue for snr to make sure that high snr is a high snr from brainwaves 
 % rather than noises
 persistent snrqueue;
@@ -131,8 +131,5 @@ for i=i:jump:iend
     end
 
 end
-
-if i > (iend-jump)
-    i =1; %reset i to rerun
-end   
+  
 

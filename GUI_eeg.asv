@@ -129,7 +129,7 @@ jump=floor(overlap*windowL);
 
 iend=length(data)-windowL;
 set(handles.slider_simulation,'Max',iend);
-set(handles.slider_simulation,'SliderStep', [0.1*windowL/iend windowL/iend]);
+set(handles.slider_simulation,'SliderStep', [windowL/iend 10*windowL/iend]);
 
 
 % --- Executes on button press in spectrogram_push_plot.
@@ -154,21 +154,19 @@ function slider_simulation_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-global data event windowL Fs chan overlap jump ts iend
+global data event windowL Fs chan overlap jump ts
 global i
 
 cla (handles.axes_simulation,'reset');
 cla (handles.axes_event,'reset');
 
 i=floor(get(handles.slider_simulation,'Value'));
-
+t=ts(i);
 
 iend=i+jump;
 plotFFT_simulation(data, Fs, chan, windowL, overlap, ...
                         handles.axes_simulation, event, handles.axes_event);
-
-t=ts(i);
-set(handles.t_text,'String', t)
+set(handles.t_text,'Value', t)
 
 
 
