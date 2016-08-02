@@ -56,7 +56,9 @@ ts = (0:L-1)*T;          % Time vector
 
 
 % Set up parameters for Fourier transform
-NFFT = 2^nextpow2(windowL);           % Next power of 2 from length of y, required for fast fourier transform to perform at its best
+% Double number of FFT point by two time window Length, peak finding
+% technique
+NFFT = 2^nextpow2(windowL*2);           % Next power of 2 from length of y, required for fast fourier transform to perform at its best
 f = Fs/2*linspace(0,1,NFFT/2+1);% frequency series vector
 
 % Initialize the plot
