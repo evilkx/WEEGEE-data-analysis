@@ -168,7 +168,7 @@ plotFFT_simulation(data, Fs, chan, windowL, overlap, ...
                         handles.axes_simulation, event, handles.axes_event);
 
 t=ts(i);
-set(handles.t_text,'String', t)
+% set(handles.t_text,'String', t)
 
 
 

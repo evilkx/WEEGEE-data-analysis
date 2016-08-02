@@ -17,7 +17,6 @@ function plotFFT_simulation(sig, Fs, chan, windowL, overlap, ha_fft, event, ha_e
 %   plotFFT_simulation(data1ftft, 255);
 %
 % See also fft
-cla(ha_fft);
 global i
 global iend ts
  %queue for snr to make sure that high snr is a high snr from brainwaves 
@@ -133,11 +132,10 @@ for i=i:jump:iend
         else
             tc = 2;
         end
-        text('Position', [interestF(c(k)), interestY(c(k))], 'String', strmax, 'Parent', ha_fft)
+        text(double(interestF(c(k)),interestY(c(k)),strmax)
         %'HorizontalAlignment','left','color',textcolor(tc),'Parent',ha_fft);
         %set(htext, 'Position', [interestF(c(k)) interestY(c(k))], 'String', strmax, 'color', textcolor(tc));
         end
-        break;
     % Update text
     %set(htext, 'Position', [xmax ymax], 'String', strmax, 'color', textcolor(tc));
     
